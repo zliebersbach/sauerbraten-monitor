@@ -1,0 +1,19 @@
+<script>
+	var socket = io();
+	socket.on("server start", () => {
+		console.log("server start");
+	});
+	socket.on("server master", () => {
+		console.log("server master");
+	});
+	socket.on("clients update", (data) => {
+		console.log("clients update", data.clients);
+	});
+	socket.on("stats update", (data) => {
+		console.log("stats update", data.stats);
+	});
+	socket.on("chat update", (data) => {
+		console.log("chat update", data.chat);
+	});
+</script>
+

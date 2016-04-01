@@ -1,0 +1,20 @@
+{
+  "name": "sauerbraten-monitor",
+  "description": "A Sauerbraten (Cube 2) server frontend.",
+  "main": "app.js",
+  "authors": [
+    "Kevin Boxhoorn <kevin@sarox.com.au>"
+  ],
+  "moduleType": [],
+  "homepage": "cube.wincinderith.tk",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0"
+  }
+}
