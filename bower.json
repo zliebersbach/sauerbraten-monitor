@@ -15,6 +15,11 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.1.4",
+    "neon-animation": "PolymerElements/neon-animation#^1.2.0",
+    "paper-material": "PolymerElements/paper-material#^1.0.6",
+    "paper-tabs": "PolymerElements/paper-tabs#^1.4.1",
+    "iron-list": "PolymerElements/iron-list#^1.2.8"
   }
 }

@@ -2,13 +2,21 @@
 
 <html>
 <head>
+	{{#if serverName}}
 	<title>{{serverName}} - Sauerbraten (Cube 2) Server</title>
-	
+	{{else}}
+	<title>Sauerbraten (Cube 2) Server</title>
+	{{/if}}
+
 	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 	<script src="/components/webcomponentsjs/webcomponents-lite.min.js"></script>
+	<link rel="import" href="/elements/elements.html">
+	<link rel="import" href="/styles/app-theme.html">
+	<link rel="import" href="/styles/theme.html">
+	<style is="custom-style" include="iron-flex iron-flex-alignment iron-positioning"></style>
 </head>
 
-<body unresolved>
+<body class="fullbleed layout vertical" unresolved>
 	{{{body}}}
 </body>
 </html>

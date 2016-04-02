@@ -1,5 +1,23 @@
+<paper-material elevation="1">
+	<paper-tabs id="page-tabs">
+		<paper-tab>Chat</paper-tab>
+		<paper-tab>Clients</paper-tab>
+		<paper-tab>Stats</paper-tab>
+	</paper-tabs>
+</paper-material>
+
+<neon-animated-pages id="page-animator" class="flex">
+	<chat-page></chat-page>
+	<clients-page></clients-page>
+	<stats-page></stats-page>
+</neon-animated-pages>
+
 <script>
-	var socket = io();
+	let chatPage = document.querySelector("chat-page");
+	let clientsPage = document.querySelector("clients-page");
+	let statsPage = document.querySelector("stats-page");
+
+	let socket = io();
 	socket.on("server start", () => {
 		console.log("server start");
 	});
@@ -8,12 +26,32 @@
 	});
 	socket.on("clients update", (data) => {
 		console.log("clients update", data.clients);
+		clientsPage.clients = data.clients;
 	});
 	socket.on("stats update", (data) => {
 		console.log("stats update", data.stats);
+		statsPage.remoteClients = data.stats.remoteClients;
+		statsPage.send = data.stats.send;
+		statsPage.receive = data.stats.receive;
 	});
 	socket.on("chat update", (data) => {
 		console.log("chat update", data.chat);
+		chatPage.chat = data.chat;
+	});
+
+	let pageTabs = document.querySelector("#page-tabs");
+	let pageAnimator = document.querySelector("#page-animator");
+	pageTabs.addEventListener("iron-select", (event) => {
+		if (pageTabs.selected > pageAnimator.selected) {
+			pageAnimator.exitAnimation = "slide-left-animation";
+			pageAnimator.entryAnimation = "slide-from-right-animation";
+		} else if (pageTabs.selected < pageAnimator.selected) {
+			pageAnimator.exitAnimation = "slide-right-animation";
+			pageAnimator.entryAnimation = "slide-from-left-animation";
+		}
+		pageAnimator.select(pageTabs.selected);
+	});
+	window.addEventListener("WebComponentsReady", () => {
+		pageTabs.select(0);
 	});
 </script>
-

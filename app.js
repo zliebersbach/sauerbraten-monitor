@@ -19,7 +19,9 @@ app.use(express.static(path.join(__dirname, "static")));
 app.use("/components", express.static(path.join(__dirname, "bower_components")));
 
 app.get("/", (req, res, next) => {
-	res.render("home");
+	res.render("home", {
+		serverName: "Wincinderith"
+	});
 });
 
 let clients = [];
@@ -42,9 +44,8 @@ const reDisconnected = /disconnected client \((\d+.\d+.\d+.\d+)\)/g;
 const reStatus = /^status: (\d+) remote clients, (\d+.\d+) send, (\d+.\d+) rec \(K\/sec\)$/g;
 const reMessage = /^([\s\S]+?): ([\s\S]+)$/g;
 tailer.tail((error, line) => {
-	console.log(line);
 	let match = null;
-	
+
 	if (line == "dedicated server started, waiting for clients...") {
 		io.emit("server start");
 	} else if (line == "master server registration succeeded") {
