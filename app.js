@@ -39,38 +39,45 @@ io.on("connection", (socket) => {
 	});
 });
 
-const reConnected = /client connected \((\d+.\d+.\d+.\d+)\)/g;
-const reDisconnected = /disconnected client \((\d+.\d+.\d+.\d+)\)/g;
-const reStatus = /^status: (\d+) remote clients, (\d+.\d+) send, (\d+.\d+) rec \(K\/sec\)$/g;
-const reMessage = /^([\s\S]+?): ([\s\S]+)$/g;
+const reConnected = /^client connected \((\d+.\d+.\d+.\d+)\)$/;
+const reDisconnected = /^disconnected client \((\d+.\d+.\d+.\d+)\)$/;
+const reStatus = /^status: (\d+) remote clients, (\d+.\d+) send, (\d+.\d+) rec \(K\/sec\)$/;
+const reMessage = /^([\s\S]+?): ([\s\S]+)$/;
 tailer.tail((error, line) => {
+	line = line.trim();
 	let match = null;
 
 	if (line == "dedicated server started, waiting for clients...") {
 		io.emit("server start");
 	} else if (line == "master server registration succeeded") {
 		io.emit("server master");
-	} else if (match = reConnected.exec(line)) {
-		clients.push(match[1]);
-		io.emit("clients update", {
-			clients: clients
+	} else if ((match = reConnected.exec(line)) !== null) {
+		let client = {
+			ip: match[1]
+		};
+		clients.push(client);
+		io.emit("client add", {
+			client: client
 		});
-	} else if (match = reDisconnected.exec(line)) {
-		let clientIndex = clients.indexOf(match[1]);
+	} else if ((match = reDisconnected.exec(line)) !== null) {
+		let client = {
+			ip: match[1]
+		};
+		let clientIndex = clients.indexOf(client);
 		if (clientIndex > -1) {
 			clients.splice(clientIndex, 1);
+			io.emit("client remove", {
+				clientIndex: clientIndex
+			});
 		}
-		io.emit("clients update", {
-			clients: clients
-		});
-	} else if (match = reStatus.exec(line)) {
-		stats.remoteClients = match[1];
-		stats.send = match[2];
-		stats.receive = match[3];
+	} else if ((match = reStatus.exec(line)) !== null) {
+		stats.remoteClients = parseFloat(match[1]);
+		stats.send = parseFloat(match[2]);
+		stats.receive = parseFloat(match[3]);
 		io.emit("stats update", {
 			stats: stats
 		});
-	} else if (match = reMessage.exec(line)) {
+	} else if ((match = reMessage.exec(line)) !== null) {
 		chat.push({
 			player: match[1],
 			message: match[2]

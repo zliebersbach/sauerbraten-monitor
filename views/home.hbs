@@ -26,7 +26,15 @@
 	});
 	socket.on("clients update", (data) => {
 		console.log("clients update", data.clients);
-		clientsPage.clients = data.clients;
+		clientsPage.set("clients", data.clients);
+	});
+	socket.on("client add", (data) => {
+		console.log("client add", data.client);
+		clientsPage.push("clients", data.client);
+	});
+	socket.on("client remove", (data) => {
+		console.log("client remove", data.clientIndex);
+		clientsPage.splice("clients", data.clientIndex, 1);
 	});
 	socket.on("stats update", (data) => {
 		console.log("stats update", data.stats);
