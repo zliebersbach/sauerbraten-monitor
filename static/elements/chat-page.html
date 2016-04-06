@@ -2,6 +2,7 @@
 
 <link rel="import" href="../components/polymer/polymer.html">
 
+<link rel="import" href="../components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../components/iron-list/iron-list.html">
 <link rel="import" href="../components/neon-animation/neon-animatable-behavior.html">
 
@@ -9,6 +10,10 @@
 	<style>
 		:host {
 			display: block;
+		}
+
+		iron-list {
+			@apply(--layout-fit);
 		}
 	</style>
 
@@ -28,7 +33,10 @@
 		behaviors: [ Polymer.NeonAnimatableBehavior ],
 
 		properties: {
-			chat: Array
+			chat: {
+				type: Array,
+				value: () => []
+			}
 		}
 	});
 </script>
