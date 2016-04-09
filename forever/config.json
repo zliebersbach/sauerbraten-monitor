@@ -1,0 +1,11 @@
+{
+	"uid": "sauerbraten-monitor",
+	"watch": true,
+	"script": "app.js",
+	"append": true,
+	"outFile": "logs/stdout.log",
+	"errFile": "logs/stderr.log",
+	"logFile": "logs/forever.log",
+	"path": "/var/www/node/sauerbraten-monitor",
+	"sourceDir": "/var/www/node/sauerbraten-monitor"
+}

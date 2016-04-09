@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+mkdir -pv ./logs
+forever start ./forever/config.json

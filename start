@@ -1,4 +1,0 @@
-#!/bin/zsh
-
-MONITOR_ROOT=/var/www/sauerbraten-monitor
-forever start -a -l $MONITOR_ROOT/logs/forever.log -o $MONITOR_ROOT/logs/stdout.log -e $MONITOR_ROOT/logs/stderr.log --sourceDir $MONITOR_ROOT --workingDir $MONITOR_ROOT -w --watchDirectory $MONITOR_ROOT --watchIgnore $MONITOR_ROOT/logs app.js
