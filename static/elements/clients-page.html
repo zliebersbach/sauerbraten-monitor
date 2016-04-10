@@ -20,7 +20,7 @@
 	<template>
 		<iron-list items="[[clients]]" as="client">
 			<template>
-				<code>[[client.ip]]</code>
+				<code>[[client.ip]] [[client.country.name]]</code>
 			</template>
 		</iron-list>
 	</template>
@@ -33,9 +33,11 @@
 		behaviors: [ Polymer.NeonAnimatableBehavior ],
 
 		properties: {
-			clients: {
-				type: Array,
-				value: () => []
+			clients: Array,
+			page: {
+				type: String,
+				readOnly: true,
+				value: "clients"
 			}
 		}
 	});

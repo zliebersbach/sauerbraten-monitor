@@ -27,7 +27,12 @@
 		properties: {
 			remoteClients: Number,
 			send: Number,
-			receive: Number
+			receive: Number,
+			page: {
+				type: String,
+				readOnly: true,
+				value: "stats"
+			}
 		}
 	});
 </script>

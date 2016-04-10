@@ -33,9 +33,11 @@
 		behaviors: [ Polymer.NeonAnimatableBehavior ],
 
 		properties: {
-			chat: {
-				type: Array,
-				value: () => []
+			chat: Array,
+			page: {
+				type: String,
+				readOnly: true,
+				value: "chat"
 			}
 		}
 	});
