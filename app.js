@@ -4,6 +4,7 @@ const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
 const path = require("path");
+const request = require("request");
 const Tailer = require("tailer");
 
 let app = express();
@@ -52,23 +53,24 @@ tailer.tail((error, line) => {
 	} else if (line == "master server registration succeeded") {
 		io.emit("server master");
 	} else if ((match = reConnected.exec(line)) !== null) {
-		let client = {
-			ip: match[1]
-		};
-		clients.push(client);
-		io.emit("client add", {
-			client: client
+		request({
+			json: true,
+			url: "https://geoip.nekudo.com/api/" + match[1]
+		}, (err, res, client) => {
+			clients.push(client);
+			io.emit("client add", {
+				client: client
+			});
 		});
 	} else if ((match = reDisconnected.exec(line)) !== null) {
-		let client = {
-			ip: match[1]
-		};
-		let clientIndex = clients.indexOf(client);
-		if (clientIndex > -1) {
-			clients.splice(clientIndex, 1);
-			io.emit("client remove", {
-				clientIndex: clientIndex
-			});
+		for (let i = 0; i < clients.length; i++) {
+			if (clients[i].ip == match[1]) {
+				clients.splice(i, 1);
+				io.emit("client remove", {
+					clientIndex: i
+				});
+				break;
+			}
 		}
 	} else if ((match = reStatus.exec(line)) !== null) {
 		stats.remoteClients = parseFloat(match[1]);
