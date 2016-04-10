@@ -19,7 +19,7 @@ app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "static")));
 app.use("/components", express.static(path.join(__dirname, "bower_components")));
 
-app.get("/", (req, res, next) => {
+app.get(/^\/(chat|clients|stats)?$/, (req, res, next) => {
 	res.render("home", {
 		serverName: "Wincinderith"
 	});

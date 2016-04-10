@@ -1,26 +1,23 @@
-<template is="dom-bind" id="app">
-	<iron-location path="\{{page}}"></iron-location>
+<iron-location></iron-location>
 
-	<paper-material elevation="1">
-		<paper-tabs id="page-tabs" selected="\{{page}}" attr-for-selected="page">
-			<paper-tab page="chat">Chat</paper-tab>
-			<paper-tab page="clients">Clients</paper-tab>
-			<paper-tab page="stats">Stats</paper-tab>
-		</paper-tabs>
-	</paper-material>
+<paper-material elevation="1">
+	<paper-tabs id="page-tabs">
+		<paper-tab>Chat</paper-tab>
+		<paper-tab>Clients</paper-tab>
+		<paper-tab>Stats</paper-tab>
+	</paper-tabs>
+</paper-material>
 
-	<neon-animated-pages id="page-animator" class="flex" selected="\{{page}}" attr-for-selected="page">
-		<chat-page></chat-page>
-		<clients-page></clients-page>
-		<stats-page></stats-page>
-	</neon-animated-pages>
-</template>
+<neon-animated-pages id="page-animator" class="flex">
+	<chat-page></chat-page>
+	<clients-page></clients-page>
+	<stats-page></stats-page>
+</neon-animated-pages>
 
 <script>
-	let app = document.querySelector("#app");
-	let chatPage = Polymer.dom(app).querySelector("chat-page");
-	let clientsPage = Polymer.dom(app).querySelector("clients-page");
-	let statsPage = Polymer.dom(app).querySelector("stats-page");
+	let chatPage = document.querySelector("chat-page");
+	let clientsPage = document.querySelector("clients-page");
+	let statsPage = document.querySelector("stats-page");
 
 	let socket = io();
 	socket.on("server start", () => {
@@ -52,8 +49,26 @@
 		chatPage.chat = data.chat;
 	});
 
-	let pageTabs = Polymer.dom(app).querySelector("#page-tabs");
-	let pageAnimator = Polymer.dom(app).querySelector("#page-animator");
+	let pageUrl = document.querySelector("iron-location");
+	let pageTabs = document.querySelector("#page-tabs");
+	let pageAnimator = document.querySelector("#page-animator");
+let pathChanged = () => {
+		switch (pageUrl.path) {
+			case "/chat":
+				pageTabs.select(0);
+				break;
+			case "/clients":
+				pageTabs.select(1);
+				break;
+			case "/stats":
+				pageTabs.select(2);
+				break;
+			default:
+				pageUrl.path = "/chat";
+				break;
+		}
+	};
+	pageUrl.addEventListener("path-changed", pathChanged);
 	pageTabs.addEventListener("iron-select", (event) => {
 		if (pageTabs.selected > pageAnimator.selected) {
 			pageAnimator.exitAnimation = "slide-left-animation";
@@ -64,7 +79,21 @@
 		}
 		pageAnimator.select(pageTabs.selected);
 	});
-	window.addEventListener("WebComponentsReady", () => {
-		pageTabs.select(0);
+pageAnimator.addEventListener("iron-select", () => {
+		switch (pageAnimator.selected) {
+			case 0:
+				pageUrl.path = "/chat";
+				break;
+			case 1:
+				pageUrl.path = "/clients";
+				break;
+			case 2:
+				pageUrl.path = "/stats";
+				break;
+			default:
+				pageAnimator.select(0);
+				break;
+		}
 	});
+	window.addEventListener("WebComponentsReady", pathChanged);
 </script>
