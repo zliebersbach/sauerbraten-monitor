@@ -9,12 +9,24 @@
 		:host {
 			display: block;
 		}
+
+		div {
+			@apply(--layout-vertical);
+		}
+		span {
+			padding: 8px 8px 0;
+		}
+		span:last-child {
+			padding: 8px;
+		}
 	</style>
 
 	<template>
-		<div><code>remote clients: [[remoteClients]]</code></div>
-		<div><code>send: [[send]]</code></div>
-		<div><code>receive: [[receive]]</code></div>
+		<div>
+			<span><code>remote clients: [[remoteClients]]</code></span>
+			<span><code>send: [[send]]</code></span>
+			<span><code>receive: [[receive]]</code><span>
+		</div>
 	</template>
 </dom-module>
 

@@ -15,12 +15,25 @@
 		iron-list {
 			@apply(--layout-fit);
 		}
+		span {
+			@apply(--layout-horizontal);
+			padding: 8px 8px 0;
+		}
+		span:last-child {
+			padding: 8px;
+		}
+		code:first-child {
+			@apply(--layout-flex);
+		}
 	</style>
 
 	<template>
 		<iron-list items="[[clients]]" as="client">
 			<template>
-				<code>[[client.ip]] [[client.country.name]]</code>
+				<span>
+					<code>[[client.ip]]</code>
+					<code>[[client.country.name]]</code>
+				</span>
 			</template>
 		</iron-list>
 	</template>

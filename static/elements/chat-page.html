@@ -15,12 +15,20 @@
 		iron-list {
 			@apply(--layout-fit);
 		}
+	span {
+			padding: 8px 8px 0;
+	}
+	span:last-child {
+			padding: 8px;
+	}
 	</style>
 
 	<template>
 		<iron-list items="[[chat]]" as="message">
 			<template>
-				<code>[[message.player]]: [[message.message]]</code>
+					<span>
+							<code>[[message.player]]: [[message.message]]</code>
+					</span>
 			</template>
 		</iron-list>
 	</template>
