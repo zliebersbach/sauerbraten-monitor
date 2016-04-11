@@ -46,7 +46,10 @@
 		behaviors: [ Polymer.NeonAnimatableBehavior ],
 
 		properties: {
-			clients: Array
+			clients: {
+				type: Array,
+				value: () => []
+			}
 		}
 	});
 </script>

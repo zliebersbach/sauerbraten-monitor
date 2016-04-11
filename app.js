@@ -28,7 +28,7 @@ app.get(/^\/(chat|clients|stats)?$/, (req, res, next) => {
 });
 
 let clients = [];
-let stats = {};
+let stats = [];
 let chat = [];
 io.on("connection", (socket) => {
 	socket.emit("clients update", {
@@ -75,24 +75,34 @@ tailer.tail((error, line) => {
 			}
 		}
 	} else if ((match = reStatus.exec(line)) !== null) {
-		stats.remoteClients = parseFloat(match[1]);
-		stats.send = parseFloat(match[2]);
-		stats.receive = parseFloat(match[3]);
-		io.emit("stats update", {
-			stats: stats
+		let stat = {
+			remoteClients: parseFloat(match[1]),
+			send: parseFloat(match[2]),
+			receive: parseFloat(match[3])
+		};
+		stats.push(stat);
+		io.emit("stat add", {
+			stat: stat
 		});
+		if (stats.length > 360) {
+			stats.shift();
+			io.emit("stat overflow");
+		}
 	} else if ((match = reMessage.exec(line)) !== null) {
 		if (match[1] == "Using home directory") return;
-		chat.push({
+		
+		let message = {
 			player: match[1],
 			message: match[2]
+		};
+		chat.push(message);
+		io.emit("chat add", {
+			message: message
 		});
-		if (chat.length > 64) {
+		if (chat.length > 4096) {
 			chat.shift();
+			io.emit("chat oveflow");
 		}
-		io.emit("chat update", {
-			chat: chat
-		});
 	}
 });
 

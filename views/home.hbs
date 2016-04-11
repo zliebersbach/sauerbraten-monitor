@@ -40,19 +40,33 @@
 	});
 	socket.on("stats update", (data) => {
 		console.log("stats update", data.stats);
-		statsPage.remoteClients = data.stats.remoteClients;
-		statsPage.send = data.stats.send;
-		statsPage.receive = data.stats.receive;
+		statsPage.set("stats", data.stats);
+	});
+	socket.on("stat add", (data) => {
+		console.log("stat add", data.stat);
+		statsPage.push("stats", data.stat);
+	});
+	socket.on("stat overflow", () => {
+		console.log("stat overflow");
+		statsPage.shift("stats");
 	});
 	socket.on("chat update", (data) => {
 		console.log("chat update", data.chat);
-		chatPage.chat = data.chat;
+		chatPage.set("chat", data.chat);
 	});
-
+	socket.on("chat add", (data) => {
+		console.log("chat add", data.message);
+		chatPage.push("chat", data.message);
+	});
+	socket.on("chat overflow", () => {
+		console.log("chat overflow");
+		chatPage.shift("chat");
+	});
+	
 	let pageUrl = document.querySelector("iron-location");
 	let pageTabs = document.querySelector("#page-tabs");
 	let pageAnimator = document.querySelector("#page-animator");
-let pathChanged = () => {
+	let pathChanged = () => {
 		switch (pageUrl.path) {
 			case "/chat":
 				pageTabs.select(0);
@@ -79,7 +93,7 @@ let pathChanged = () => {
 		}
 		pageAnimator.select(pageTabs.selected);
 	});
-pageAnimator.addEventListener("iron-select", () => {
+	pageAnimator.addEventListener("iron-select", () => {
 		switch (pageAnimator.selected) {
 			case 0:
 				pageUrl.path = "/chat";

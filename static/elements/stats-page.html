@@ -23,9 +23,9 @@
 
 	<template>
 		<div>
-			<span><code>remote clients: [[remoteClients]]</code></span>
-			<span><code>send: [[send]]</code></span>
-			<span><code>receive: [[receive]]</code><span>
+			<span><code>remote clients: [[lastStat(stats.*, "remoteClients")]]</code></span>
+			<span><code>send: [[lastStat(stats.*, "send")]]</code></span>
+			<span><code>receive: [[lastStat(stats.*, "receive")]]</code><span>
 		</div>
 	</template>
 </dom-module>
@@ -37,9 +37,14 @@
 		behaviors: [ Polymer.NeonAnimatableBehavior ],
 
 		properties: {
-			remoteClients: Number,
-			send: Number,
-			receive: Number
+			stats: {
+				type: Array,
+				value: () => []
+			}
+		},
+
+		lastStat: function(change, property) {
+			return this.get(property, change.base[change.base.length - 1]);
 		}
 	});
 </script>
