@@ -2,6 +2,7 @@
 
 const http = require("http");
 const express = require("express");
+const favicon = require("serve-favicon");
 const socketio = require("socket.io");
 const path = require("path");
 const request = require("request");
@@ -16,6 +17,7 @@ let tailer = new Tailer("/var/log/sauerbraten-server", {
 });
 
 app.set("view engine", "hbs");
+app.use(favicon(path.join(__dirname, "static", "favicon.ico")));
 app.use(express.static(path.join(__dirname, "static")));
 app.use("/components", express.static(path.join(__dirname, "bower_components")));
 
@@ -80,6 +82,7 @@ tailer.tail((error, line) => {
 			stats: stats
 		});
 	} else if ((match = reMessage.exec(line)) !== null) {
+		if (match[1] == "Using home directory") return;
 		chat.push({
 			player: match[1],
 			message: match[2]
