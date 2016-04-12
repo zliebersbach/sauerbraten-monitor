@@ -7,29 +7,35 @@
 <dom-module id="stats-page">
 	<style>
 		:host {
-			display: block;
-		}
-
-		div {
 			@apply(--layout-vertical);
 		}
-		span {
-			padding: 8px 8px 0;
+
+		#stats-container {
+			@apply(--layout-horizontal);
+			padding: 8px;
 		}
-		span:last-child {
+		span {
+			@apply(--layout-flex);
+			text-align: center;
+		}
+
+		#chart {
+			@apply(--layout-flex);
 			padding: 8px;
 		}
 	</style>
 
 	<template>
-		<div>
+		<div id="stats-container">
 			<span><code>remote clients: [[lastStat(stats.*, "remoteClients")]]</code></span>
 			<span><code>send: [[lastStat(stats.*, "send")]]</code></span>
 			<span><code>receive: [[lastStat(stats.*, "receive")]]</code><span>
 		</div>
+		<div id="chart"></div>
 	</template>
 </dom-module>
 
+<script src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
 	Polymer({
 		is: "stats-page",
@@ -40,11 +46,79 @@
 			stats: {
 				type: Array,
 				value: () => []
+			},
+			chart: Object,
+			chartData: Object,
+			chartOptions: {
+				type: Object,
+				value: () => ({
+					backgroundColor: "#302C28",
+					colors: [
+						"#662222", "#FFBB00", "#FF9900"
+					],
+					curveType: "function",
+					hAxis: {
+						textStyle: {
+							fontName: "monospace"
+						}
+					},
+					legend: {
+						alignment: "center",
+						position: "bottom",
+						textStyle: {
+							fontName: "monospace"
+						}
+					},
+					tooltip: {
+						textStyle: {
+							fontName: "monospaced"
+						}
+					},
+					vAxis: {
+						textStyle: {
+							fontName: "monospace"
+						}
+					},
+				})
 			}
+		},
+
+		observers: [
+			"statAdded(stats.splices)"
+		],
+		statAdded: function(change) {
+			if (change) {
+				this.updateChart();
+			}
+		},
+		updateChart: function() {
+			if (this.chartData === undefined) return;
+			this.chartData.removeRows(0, this.chartData.getNumberOfRows());
+			for (let i = 0; i < this.stats.length; i++) {	
+				let stat = this.stats[i];
+				this.chartData.addRow([ i, stat.remoteClients, stat.send, stat.receive ]);
+			}
+			this.chart.draw(this.chartData, google.charts.Line.convertOptions(this.chartOptions));
 		},
 
 		lastStat: function(change, property) {
 			return this.get(property, change.base[change.base.length - 1]);
+		},
+		ready: function() {
+			google.charts.load("current", {
+				packages: [ "line" ]
+			});
+			google.charts.setOnLoadCallback(function() {
+				this.chartData = new google.visualization.DataTable();
+				this.chartData.addColumn("number", "minute");
+				this.chartData.addColumn("number", "remote clients");
+				this.chartData.addColumn("number", "send");
+				this.chartData.addColumn("number", "receive");
+				
+				this.chart = new google.charts.Line(this.$.chart);
+
+				this.updateChart();
+			}.bind(this));
 		}
 	});
 </script>

@@ -27,8 +27,13 @@ app.get(/^\/(chat|clients|stats)?$/, (req, res, next) => {
 	});
 });
 
+const defaultStat = {
+	remoteClients: 0,
+	send: 0,
+	receive: 0
+};
 let clients = [];
-let stats = [];
+let stats = [ defaultStat ];
 let chat = [];
 io.on("connection", (socket) => {
 	socket.emit("clients update", {
@@ -41,6 +46,20 @@ io.on("connection", (socket) => {
 		chat: chat
 	});
 });
+
+const defaultStatsCallback = () => {
+	for (let i = 0; i < 2; i++) {
+		stats.push(defaultStat);
+		io.emit("stat add", {
+			stat: defaultStat
+		});
+		if (stats.length > 360) {
+			stats.shift();
+			io.emit("stat overflow");
+		}
+	}
+};
+let statsInterval = setInterval(defaultStatsCallback, 120000);
 
 const reConnected = /^client connected \((\d+.\d+.\d+.\d+)\)$/;
 const reDisconnected = /^disconnected client \((\d+.\d+.\d+.\d+)\)$/;
@@ -75,6 +94,7 @@ tailer.tail((error, line) => {
 			}
 		}
 	} else if ((match = reStatus.exec(line)) !== null) {
+		clearInterval(statsInterval);
 		let stat = {
 			remoteClients: parseFloat(match[1]),
 			send: parseFloat(match[2]),
@@ -88,6 +108,7 @@ tailer.tail((error, line) => {
 			stats.shift();
 			io.emit("stat overflow");
 		}
+		statsInterval = setInterval(defaultStatsCallback, 120000);
 	} else if ((match = reMessage.exec(line)) !== null) {
 		if (match[1] == "Using home directory") return;
 		

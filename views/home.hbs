@@ -41,6 +41,7 @@
 	socket.on("stats update", (data) => {
 		console.log("stats update", data.stats);
 		statsPage.set("stats", data.stats);
+		statsPage.updateChart();
 	});
 	socket.on("stat add", (data) => {
 		console.log("stat add", data.stat);
