@@ -53,7 +53,7 @@ const defaultStatsCallback = () => {
 		io.emit("stat add", {
 			stat: defaultStat
 		});
-		if (stats.length > 360) {
+		if (stats.length > 60) {
 			stats.shift();
 			io.emit("stat overflow");
 		}
@@ -104,7 +104,7 @@ tailer.tail((error, line) => {
 		io.emit("stat add", {
 			stat: stat
 		});
-		if (stats.length > 360) {
+		if (stats.length > 60) {
 			stats.shift();
 			io.emit("stat overflow");
 		}
