@@ -19,49 +19,51 @@
 	let clientsPage = document.querySelector("clients-page");
 	let statsPage = document.querySelector("stats-page");
 
-	let socket = io();
-	socket.on("server start", () => {
-		console.log("server start");
-	});
-	socket.on("server master", () => {
-		console.log("server master");
-	});
-	socket.on("clients update", (data) => {
-		console.log("clients update", data.clients);
-		clientsPage.set("clients", data.clients);
-	});
-	socket.on("client add", (data) => {
-		console.log("client add", data.client);
-		clientsPage.push("clients", data.client);
-	});
-	socket.on("client remove", (data) => {
-		console.log("client remove", data.clientIndex);
-		clientsPage.splice("clients", data.clientIndex, 1);
-	});
-	socket.on("stats update", (data) => {
-		console.log("stats update", data.stats);
-		statsPage.set("stats", data.stats);
-		statsPage.updateChart();
-	});
-	socket.on("stat add", (data) => {
-		console.log("stat add", data.stat);
-		statsPage.push("stats", data.stat);
-	});
-	socket.on("stat overflow", () => {
-		console.log("stat overflow");
-		statsPage.shift("stats");
-	});
-	socket.on("chat update", (data) => {
-		console.log("chat update", data.chat);
-		chatPage.set("chat", data.chat);
-	});
-	socket.on("chat add", (data) => {
-		console.log("chat add", data.message);
-		chatPage.push("chat", data.message);
-	});
-	socket.on("chat overflow", () => {
-		console.log("chat overflow");
-		chatPage.shift("chat");
+	window.addEventListener("WebComponentsReady", () => {
+		let socket = io();
+		socket.on("server start", () => {
+			console.log("server start");
+		});
+		socket.on("server master", () => {
+			console.log("server master");
+		});
+		socket.on("clients update", (data) => {
+			console.log("clients update", data.clients);
+			clientsPage.set("clients", data.clients);
+		});
+		socket.on("client add", (data) => {
+			console.log("client add", data.client);
+			clientsPage.push("clients", data.client);
+		});
+		socket.on("client remove", (data) => {
+			console.log("client remove", data.clientIndex);
+			clientsPage.splice("clients", data.clientIndex, 1);
+		});
+		socket.on("stats update", (data) => {
+			console.log("stats update", data.stats);
+			statsPage.set("stats", data.stats);
+			statsPage.updateChart();
+		});
+		socket.on("stat add", (data) => {
+			console.log("stat add", data.stat);
+			statsPage.push("stats", data.stat);
+		});
+		socket.on("stat overflow", () => {
+			console.log("stat overflow");
+			statsPage.shift("stats");
+		});
+		socket.on("chat update", (data) => {
+			console.log("chat update", data.chat);
+			chatPage.set("chat", data.chat);
+		});
+		socket.on("chat add", (data) => {
+			console.log("chat add", data.message);
+			chatPage.push("chat", data.message);
+		});
+		socket.on("chat overflow", () => {
+			console.log("chat overflow");
+			chatPage.shift("chat");
+		});
 	});
 	
 	let pageUrl = document.querySelector("iron-location");
