@@ -98,7 +98,7 @@
 			}
 		},
 		updateChart: function() {
-			if (this.chartData === undefined) return;
+			if (this.chartData === undefined || this.stats.length === 0) return;
 			this.chartData.removeRows(0, this.chartData.getNumberOfRows());
 			for (let i = 0; i < this.stats.length; i++) {	
 				let stat = this.stats[i];
