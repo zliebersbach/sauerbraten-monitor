@@ -15,20 +15,29 @@
 		iron-list {
 			@apply(--layout-fit);
 		}
-	span {
+		span {
 			padding: 8px 8px 0;
-	}
-	span:last-child {
+		}
+		span:last-child {
 			padding: 8px;
-	}
+		}
+
+		:host > span {
+			display: inline-block;
+		}
 	</style>
 
 	<template>
+		<template is="dom-if" if="[[isEmpty(chat.*)]]">
+			<span>
+				<code>there appears to be no messages in the chat! connect to the server and be the first to say something.</code>
+			</span>
+		</template>
 		<iron-list items="[[chat]]" as="message">
 			<template>
-					<span>
-							<code>[[message.player]]: [[message.message]]</code>
-					</span>
+				<span>
+					<code>[[message.player]]: [[message.message]]</code>
+				</span>
 			</template>
 		</iron-list>
 	</template>
@@ -45,6 +54,10 @@
 				type: Array,
 				value: () => []
 			}
+		},
+
+		isEmpty: function(change) {
+			return change.base.length === 0;
 		}
 	});
 </script>
