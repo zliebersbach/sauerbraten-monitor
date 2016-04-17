@@ -25,9 +25,19 @@
 		code:first-child {
 			@apply(--layout-flex);
 		}
+
+		:host > span {
+			display: inline-block;
+		}
 	</style>
 
 	<template>
+		<template is="dom-if" if="[[isEmpty(clients.*)]]">
+			<span>
+				<code>there appears to be no clients connected! connect to the server and be the first online. it usually takes just a couple of minutes before other players join.</code>
+			</span>
+		</template>
+		
 		<iron-list items="[[clients]]" as="client">
 			<template>
 				<span>
@@ -50,6 +60,10 @@
 				type: Array,
 				value: () => []
 			}
+		},
+
+		isEmpty: function(change) {
+			return change.base.length === 0;
 		}
 	});
 </script>
