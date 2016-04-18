@@ -132,13 +132,12 @@
 							},
 							{
 								labels: {
-									format: "{value} K/sec",
 									style: textStyle
 								},
 								min: 0,
 								opposite: true,
 								title: {
-									text: "speed",
+									text: "speed (K/sec)",
 									style: textStyle
 								}
 							}
@@ -162,7 +161,6 @@
 				let data = this.stats.map((item, index) => {
 					return [index, item[key]];
 				});
-				console.log(key, data);
 				this.chart.get(key).setData(data);
 			}
 		},
@@ -172,6 +170,11 @@
 		},
 		ready: function() {
 			this.chart = new Highcharts.Chart(this.chartOptions);
+		},
+		attached: function() {
+			this.async(function() {
+				this.chart.reflow();
+			}, 100);
 		}
 	});
 </script>
