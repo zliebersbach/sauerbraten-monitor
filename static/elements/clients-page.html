@@ -38,7 +38,7 @@
 			</span>
 		</template>
 		
-		<iron-list items="[[clients]]" as="client">
+		<iron-list items="[[clients]]" as="client" id="clients-list">
 			<template>
 				<span>
 					<code>[[client.ip]]</code>
@@ -64,6 +64,14 @@
 
 		isEmpty: function(change) {
 			return change.base.length === 0;
+		},
+		update: function() {
+			this.$["clients-list"]._update();
+			this.$["clients-list"].scrollToIndex(this.clients.length - 1);
+		},
+
+		ready: function() {
+			this.parentNode.addEventListener("iron-select", this.update.bind(this));
 		}
 	});
 </script>

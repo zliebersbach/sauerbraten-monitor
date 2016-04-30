@@ -64,6 +64,10 @@
 			console.log("chat overflow");
 			chatPage.shift("chat");
 		});
+
+		chatPage.update();
+		clientsPage.update();
+		statsPage.updateChart();
 	});
 	
 	let pageUrl = document.querySelector("iron-location");

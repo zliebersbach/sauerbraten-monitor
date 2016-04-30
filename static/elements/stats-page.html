@@ -163,6 +163,7 @@
 				});
 				this.chart.get(key).setData(data);
 			}
+			this.chart.reflow();
 		},
 
 		lastStat: function(change, property) {
@@ -170,6 +171,7 @@
 		},
 		ready: function() {
 			this.chart = new Highcharts.Chart(this.chartOptions);
+			this.parentNode.addEventListener("iron-select", this.updateChart.bind(this));
 		},
 		attached: function() {
 			this.async(function() {

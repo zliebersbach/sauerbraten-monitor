@@ -34,7 +34,7 @@
 			</span>
 		</template>
 		
-		<iron-list items="[[chat]]" as="message">
+		<iron-list items="[[chat]]" as="message" id="chat-list">
 			<template>
 				<span>
 					<code>[[message.player]]: [[message.message]]</code>
@@ -59,6 +59,14 @@
 
 		isEmpty: function(change) {
 			return change.base.length === 0;
+		},
+		update: function() {
+			this.$["chat-list"]._update();
+			this.$["chat-list"].scrollToIndex(this.chat.length - 1);
+		},
+
+		ready: function() {
+			this.parentNode.addEventListener("iron-select", this.update.bind(this));
 		}
 	});
 </script>
