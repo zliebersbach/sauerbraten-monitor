@@ -62,6 +62,10 @@
 			}
 		},
 
+		observers: [
+			"update(clients.splices)"
+		],
+		
 		isEmpty: function(change) {
 			return change.base.length === 0;
 		},

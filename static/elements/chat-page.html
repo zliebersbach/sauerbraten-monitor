@@ -57,6 +57,10 @@
 			}
 		},
 
+		observers: [
+			"update(chat.splices)"
+		],
+
 		isEmpty: function(change) {
 			return change.base.length === 0;
 		},
