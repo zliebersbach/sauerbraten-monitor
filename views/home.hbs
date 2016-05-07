@@ -1,11 +1,33 @@
+<!--
+   sauerbraten-monitor, a web monitor for a Sauerbraten server,
+   built with Polymer and Node.js.
+   Copyright (C) 2016  Kevin Boxhoorn
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <iron-location></iron-location>
 
 <paper-material elevation="1">
-	<paper-tabs id="page-tabs">
-		<paper-tab>Chat</paper-tab>
-		<paper-tab>Clients</paper-tab>
-		<paper-tab>Stats</paper-tab>
-	</paper-tabs>
+	<paper-toolbar id="page-header" class="medium-tall" justify="center">
+		<h1>{{serverName}}</h1>
+		<paper-tabs id="page-tabs" class="middle fit">
+			<paper-tab>Chat</paper-tab>
+			<paper-tab>Clients</paper-tab>
+			<paper-tab>Stats</paper-tab>
+		</paper-tabs>
+	</paper-toolbar>
 </paper-material>
 
 <neon-animated-pages id="page-animator" class="flex">

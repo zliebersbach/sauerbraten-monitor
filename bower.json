@@ -22,6 +22,7 @@
     "paper-tabs": "PolymerElements/paper-tabs#^1.4.1",
     "iron-list": "PolymerElements/iron-list#^1.2.8",
     "iron-location": "PolymerElements/iron-location#^0.8.1",
-    "highcharts": "^4.2.4"
+    "highcharts": "^4.2.4",
+    "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.4"
   }
 }
