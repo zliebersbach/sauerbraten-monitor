@@ -17,13 +17,27 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<iron-location></iron-location>
+<iron-location url-space-regex="^\/(chat|clients|stats)$"></iron-location>
 
 <paper-material elevation="1">
 	<paper-toolbar id="page-header" class="medium-tall">
 		<iron-icon icon="site:icon"></iron-icon>
 		<h1 id="page-title">{{serverName}}</h1>
-		<paper-icon-button icon="more-vert"></paper-icon-button>
+		<paper-menu-button horizontal-align="right" ignore-select>
+			<paper-icon-button icon="more-vert" class="dropdown-trigger"></paper-icon-button>
+			<paper-menu class="dropdown-content">
+				<a class="no-style" href="/about">
+					<paper-item>
+						About
+					</paper-item>
+				</a>
+				<a class="no-style" href="https://github.com/wincinderith/sauerbraten-monitor" target="_blank">
+					<paper-item>
+						GitHub
+					</paper-item>
+				</a>
+			</paper-menu>
+		</paper-menu-button>
 		<paper-tabs id="page-tabs" class="middle fit">
 			<paper-tab>Chat</paper-tab>
 			<paper-tab>Clients</paper-tab>
