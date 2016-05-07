@@ -1,5 +1,6 @@
 "use strict";
 
+const hbs = require("hbs");
 const http = require("http");
 const express = require("express");
 const favicon = require("serve-favicon");
@@ -16,6 +17,8 @@ let tailer = new Tailer("/var/log/sauerbraten-server", {
 	delay: 100
 });
 
+app.locals.tagManager = process.env.SM_TAGMANAGER;
+hbs.registerPartials(path.join(__dirname, "views/partials"));
 app.set("view engine", "hbs");
 app.use(favicon(path.join(__dirname, "static", "favicon.ico")));
 app.use(express.static(path.join(__dirname, "static")));
