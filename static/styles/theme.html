@@ -32,6 +32,9 @@
 		color: var(--dark-accent-color);
 	}
 
+	iron-icon {
+		padding: 8px;
+	}
 	neon-animated-pages {
 		overflow: hidden;
 	}
@@ -44,5 +47,10 @@
 	paper-toolbar {
 		--paper-toolbar-background: var(--primary-color);
 		--paper-toolbar-height: 56px;
+	}
+	
+	#page-title {
+		@apply(--layout-flex);
+		text-align: center;
 	}
 </style>

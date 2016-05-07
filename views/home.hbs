@@ -20,8 +20,10 @@
 <iron-location></iron-location>
 
 <paper-material elevation="1">
-	<paper-toolbar id="page-header" class="medium-tall" justify="center">
-		<h1>{{serverName}}</h1>
+	<paper-toolbar id="page-header" class="medium-tall">
+		<iron-icon icon="site:icon"></iron-icon>
+		<h1 id="page-title">{{serverName}}</h1>
+		<paper-icon-button icon="more-vert"></paper-icon-button>
 		<paper-tabs id="page-tabs" class="middle fit">
 			<paper-tab>Chat</paper-tab>
 			<paper-tab>Clients</paper-tab>
