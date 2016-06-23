@@ -1,3 +1,3 @@
 # sauerbraten-monitor
-A web monitor for a Sauerbraten server, build with Polymer and Node.js. View a
-live demo [here](https://cube.wincinderith.tk).
+A web monitor for a Sauerbraten (Cube 2) server, build with Polymer and Node.js.
+View a live demo [here](https://cube.wincinderith.tk).
