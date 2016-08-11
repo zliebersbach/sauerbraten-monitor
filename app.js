@@ -19,6 +19,46 @@
 
 "use strict";
 
+const gulp = require("gulp");
+const flatmap = require("gulp-flatmap");
+const htmlmin = require("gulp-htmlmin");
+const vulcanize = require("gulp-vulcanize");
+
+const production = process.env.NODE_ENV == "production";
+const htmlminOpts = {
+	removeComments: true,
+	collapseWhitespace: true,
+	minifyJS: true,
+	minifyCSS: true
+};
+const importsHtml = "static/elements/";
+
+gulp.task("vulcanize", () => {
+	return gulp.src(importsHtml + "/*imports.html")
+		.pipe(flatmap((stream, file) => {
+			let basename = path.basename(file.path);
+			console.log("vulcanizing", basename, "...");
+			return stream.pipe(vulcanize({
+				abspath: __dirname,
+				inputUrl: "/" + importsHtml + basename,
+				inlineScripts: true,
+				inlineCss: true
+			}));
+
+		}))
+		.pipe(htmlmin(htmlminOpts))
+		.pipe(gulp.dest("generated"));
+
+});
+gulp.task("watch", () => {
+	gulp.watch([ "bower_components/*",
+		importsHtml + "*", "static/styles/*" ],
+		[ "vulcanize" ]);
+
+});
+gulp.task("default", [ "watch", "vulcanize" ]);
+if (production) gulp.start("default");
+
 const hbs = require("hbs");
 const http = require("http");
 const express = require("express");
@@ -31,12 +71,14 @@ const Tailer = require("tailer");
 let app = express();
 let server = http.createServer(app);
 
+app.locals.importsHtml = production ? "generated" : "elements";
 app.locals.tagManager = process.env.SM_TAGMANAGER;
 hbs.registerPartials(path.join(__dirname, "views", "partials"));
 app.set("view engine", "hbs");
 app.use(favicon(path.join(__dirname, "static", "favicon.ico")));
 app.use(express.static(path.join(__dirname, "static")));
 app.use("/bower_components", express.static(path.join(__dirname, "bower_components")));
+app.use("/generated", express.static(path.join(__dirname, "generated")));
 
 app.get(/^\/(chat|clients|stats)?$/, (req, res, next) => {
 	res.render("home", {
@@ -81,7 +123,7 @@ io.on("connection", (socket) => {
 	});
 });
 
-let tailer = new Tailer("/var/log/sauerbraten-server", {
+let tailer = new Tailer("/var/log/sauerbraten-server.log", {
 	fromStart: false,
 	delay: 100
 });

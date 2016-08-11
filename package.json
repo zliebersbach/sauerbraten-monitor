@@ -9,6 +9,10 @@
   "author": "Kevin Boxhoorn <kevin@sarox.com.au>",
   "dependencies": {
     "express": "^4.13.4",
+    "gulp": "^3.9.1",
+    "gulp-flatmap": "^1.0.0",
+    "gulp-htmlmin": "^2.0.0",
+    "gulp-vulcanize": "^6.1.0",
     "hbs": "^4.0.0",
     "request": "^2.71.0",
     "serve-favicon": "^2.3.0",
