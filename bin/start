@@ -18,4 +18,5 @@
 
 set -e
 mkdir -pv ./logs
-forever start ./forever/config.json
+# start forever, default NODE_ENV to development
+NODE_ENV=${1:-development} forever start ./forever/config.json

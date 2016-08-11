@@ -4,7 +4,7 @@
   "description": "A Sauerbraten (Cube 2) server frontend.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "./bin/start"
   },
   "author": "Kevin Boxhoorn <kevin@sarox.com.au>",
   "dependencies": {
