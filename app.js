@@ -30,11 +30,6 @@ const Tailer = require("tailer");
 
 let app = express();
 let server = http.createServer(app);
-let io = socketio(server);
-let tailer = new Tailer("/var/log/sauerbraten-server", {
-	fromStart: false,
-	delay: 100
-});
 
 app.locals.tagManager = process.env.SM_TAGMANAGER;
 hbs.registerPartials(path.join(__dirname, "views/partials"));
@@ -48,7 +43,24 @@ app.get(/^\/(chat|clients|stats)?$/, (req, res, next) => {
 		serverName: "~ Wincinderith ~"
 	});
 });
+app.get(/^\/about$/, (req, res, next) => {
+	res.render("about");
+});
 
+app.use((req, res, next) => {
+	let err = new Error("Not Found");
+	err.status = 404;
+	next(err);
+});
+app.use((err, req, res, next) => {
+	if (err.status) {
+		res.status(err.status).send(err.message);
+	} else {
+		console.error(err.stack);
+	}
+});
+
+let io = socketio(server);
 const defaultStat = {
 	remoteClients: 0,
 	send: 0,
@@ -67,6 +79,11 @@ io.on("connection", (socket) => {
 	socket.emit("chat update", {
 		chat: chat
 	});
+});
+
+let tailer = new Tailer("/var/log/sauerbraten-server", {
+	fromStart: false,
+	delay: 100
 });
 
 const defaultStatsCallback = () => {
@@ -88,9 +105,10 @@ const reDisconnected = /^disconnected client \((\d+.\d+.\d+.\d+)\)$/;
 const reStatus = /^status: (\d+) remote clients, (\d+.\d+) send, (\d+.\d+) rec \(K\/sec\)$/;
 const reMessage = /^([\s\S]+?): ([\s\S]+)$/;
 tailer.tail((error, line) => {
+	if (!line) return;
 	line = line.trim();
-	let match = null;
 
+	let match = null;
 	if (line == "dedicated server started, waiting for clients...") {
 		io.emit("server start");
 	} else if (line == "master server registration succeeded") {
@@ -133,7 +151,7 @@ tailer.tail((error, line) => {
 		statsInterval = setInterval(defaultStatsCallback, 120000);
 	} else if ((match = reMessage.exec(line)) !== null) {
 		if (match[1] == "Using home directory") return;
-		
+
 		let message = {
 			player: match[1],
 			message: match[2]
@@ -150,4 +168,5 @@ tailer.tail((error, line) => {
 });
 
 const port = 3000;
-server.listen(port, () => console.log("sauerbraten-monitor listening on port", port, "..."));
+server.listen(port, () =>
+	console.log("sauerbraten-monitor listening on port", port, "..."));
