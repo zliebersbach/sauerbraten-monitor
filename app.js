@@ -32,11 +32,11 @@ let app = express();
 let server = http.createServer(app);
 
 app.locals.tagManager = process.env.SM_TAGMANAGER;
-hbs.registerPartials(path.join(__dirname, "views/partials"));
+hbs.registerPartials(path.join(__dirname, "views", "partials"));
 app.set("view engine", "hbs");
 app.use(favicon(path.join(__dirname, "static", "favicon.ico")));
 app.use(express.static(path.join(__dirname, "static")));
-app.use("/components", express.static(path.join(__dirname, "bower_components")));
+app.use("/bower_components", express.static(path.join(__dirname, "bower_components")));
 
 app.get(/^\/(chat|clients|stats)?$/, (req, res, next) => {
 	res.render("home", {
