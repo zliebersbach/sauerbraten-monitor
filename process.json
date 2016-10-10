@@ -1,0 +1,20 @@
+{
+	apps: [
+		{
+			name: "sauerbraten-monitor",
+			script: "./app.js",
+			watch: true,
+			ignore_watch: [
+				".git",
+				"generated",
+				"static"
+			],
+			env: {
+				"NODE_ENV": "development"
+			},
+			env_production: {
+				"NODE_ENV": "production"
+			}
+		}
+	]
+}

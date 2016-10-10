@@ -4,9 +4,9 @@
   "description": "A Sauerbraten (Cube 2) server frontend.",
   "main": "app.js",
   "scripts": {
-    "start": "./bin/start"
+    "start": "pm2 start ./process.json"
   },
-  "author": "Kevin Boxhoorn <kevin@sarox.com.au>",
+  "author": "Kevin Boxhoorn <kevinboxhoorn@yahoo.com>",
   "dependencies": {
     "express": "^4.13.4",
     "gulp": "^3.9.1",
